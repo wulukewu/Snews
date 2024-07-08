@@ -15,14 +15,14 @@ import json
 # ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
 # Variables - GitHub
-# line_notify_id = os.environ['LINE_NOTIFY_ID']
-# sheet_key = os.environ['GOOGLE_SHEETS_KEY']
-# gs_credentials = os.environ['GS_CREDENTIALS']
+line_notify_id = os.environ['LINE_NOTIFY_ID']
+sheet_key = os.environ['GOOGLE_SHEETS_KEY']
+gs_credentials = os.environ['GS_CREDENTIALS']
 
 # Variables - Google Colab
-line_notify_id = LINE_NOTIFY_ID
-sheet_key = GOOGLE_SHEETS_KEY
-gs_credentials = GS_CREDENTIALS
+# line_notify_id = LINE_NOTIFY_ID
+# sheet_key = GOOGLE_SHEETS_KEY
+# gs_credentials = GS_CREDENTIALS
 
 # ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 

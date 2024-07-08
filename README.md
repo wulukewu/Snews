@@ -1,6 +1,6 @@
-<!--   <div align="center"> -->
-<!--   <img src="https://lihi-io.s3.us-west-004.backblazeb2.com/dXNlcl8xMjY5ODY=/1706290148003.png" alt="KJ Logo" width="300"> -->
-<!--   </div> -->
+<div align="center">
+   <img src="https://lihi-io.s3.us-west-004.backblazeb2.com/dXNlcl8xNDA2OTc=/1720433177223.png" alt="KJ Logo" width="300">
+</div>
 
 <h1 align="center">Snews</h1>
 

@@ -1,5 +1,5 @@
 <div align="center">
-   <img src="https://lihi-io.s3.us-west-004.backblazeb2.com/dXNlcl8xNDA2OTc=/1720433177223.png" alt="Snews Logo" width="300">
+   <img src="https://lihi-io.s3.us-west-004.backblazeb2.com/dXNlcl8xNDA2OTc=/1720440613271.png" alt="Snews Logo" width="300">
 </div>
 
 <h1 align="center">Snews</h1>

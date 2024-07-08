@@ -5,7 +5,7 @@
 <h1 align="center">Snews</h1>
 
 <p align="center">
-  <strong>截取自<a href="https://www.efroip.com/efroip/publish_page/1895/?cid=65574">多校</a>官網，將最新消息傳送至 LINE Notify。</strong>
+  <strong>截取自<a href="https://www.efroip.com/efroip/publish_page/1895/?cid=65574">多校（數位果子）</a>官網，將最新消息傳送至 LINE Notify。</strong>
   <strong>改編自<a href="https://github.com/KJnews/KJnews">KJnews</a>。</strong>
 </p>
 

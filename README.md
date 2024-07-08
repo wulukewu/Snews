@@ -35,13 +35,13 @@ Actions → I understand my workflows, go ahead and enable them → Enable workf
    > ```
 
 
-#### [新增Google Sheets模版](https://lihi.cc/E4Zjs)
+#### [新增Google Sheets模版](https://lihi.cc/sRZoi)
 2. <code>GOOGLE_SHEETS_KEY</code>：在`https://docs.google.com/spreadsheets/d/`後的一串金鑰<br><br>
    Steps: <br>
    建立副本 → 複製Google Sheets Key<br><br>
    > Example:
    > ```
-   > 1_3uoF27lQChsr7QYNk_V8FhvtkPFVRrkCKjFeJsutvY
+   > 1xtpizhkHa1mWuBvZLgmzlo84_W8Ls_4Zwpygq9BQLI0
    > ```
 
 

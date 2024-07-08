@@ -71,7 +71,7 @@ def get_content(url):
   text = text.replace(' ', '')  # 刪除空白
   return text
 
-text_limit = 1000-4-3
+text_limit = 1000-4-14
 
 # LINE Notify
 def LINE_Notify(school, category, date, title, unit, link, content):
@@ -296,9 +296,9 @@ urls = [
     '國立員林高級農工職業學校@教師資訊@https://www.ylvs.chc.edu.tw/ischool/widget/site_news/main2.php?uid=WID_0_2_b3262b016df9aac06287815e30d33d053e34a4fd&maximize=1&allbtn=0', 
     '國立員林家商@最新消息@https://www.ylhcvs.chc.edu.tw/ischool/widget/site_news/main2.php?uid=WID_0_2_1303366a388017702188cda6f6b01923b445b86a&maximize=1&allbtn=0', 
     '彰化縣立和美高級中學@公告訊息@https://www.hmjh.chc.edu.tw/ischool/widget/site_news/main2.php?uid=WID_0_2_07c6a54400b3c4642ab50a114a0a1c6949b5a79a&maximize=1&allbtn=0', 
-    '教育部核定優質化國立埔里高工@校園公佈欄@https://www.plvs.ntct.edu.tw/ischool/widget/site_news/main2.php?uid=WID_0_2_778d20bd132ae5d0cf0a7f35c3e79698c9289c95&maximize=1&allbtn=0', 
-    '教育部核定優質化國立埔里高工@各科活動花絮及榮譽榜@https://www.plvs.ntct.edu.tw/ischool/widget/site_news/main2.php?uid=WID_0_2_70f362cfedbe2ceb175b0377f4bd56b2beaab375&maximize=1&allbtn=0', 
-    '教育部核定優質化國立埔里高工@師生競賽研習等訊息@https://www.plvs.ntct.edu.tw/ischool/widget/site_news/main2.php?uid=WID_0_2_563e91ae749070f46463a5bcab817fee83e81f4e&maximize=1&allbtn=0', 
+    '國立埔里高工@校園公佈欄@https://www.plvs.ntct.edu.tw/ischool/widget/site_news/main2.php?uid=WID_0_2_778d20bd132ae5d0cf0a7f35c3e79698c9289c95&maximize=1&allbtn=0', 
+    '國立埔里高工@各科活動花絮及榮譽榜@https://www.plvs.ntct.edu.tw/ischool/widget/site_news/main2.php?uid=WID_0_2_70f362cfedbe2ceb175b0377f4bd56b2beaab375&maximize=1&allbtn=0', 
+    '國立埔里高工@師生競賽研習等訊息@https://www.plvs.ntct.edu.tw/ischool/widget/site_news/main2.php?uid=WID_0_2_563e91ae749070f46463a5bcab817fee83e81f4e&maximize=1&allbtn=0', 
     '南投縣私立三育高級中學@消息公佈欄@https://www.taa.ntct.edu.tw/ischool/widget/site_news/main2.php?uid=WID_0_2_f1b18cc02640f18edbe419d124ae9990999f6852&maximize=1&allbtn=0', 
     '均頭國中@消息公佈欄@https://www.jtjhs.ntct.edu.tw/ischool/widget/site_news/main2.php?uid=WID_0_2_d1e5ed3e37b21654ee3cae94bcd41115cf47f02c&maximize=1&allbtn=0', 
     '均頭國中@榮譽榜@https://www.jtjhs.ntct.edu.tw/ischool/widget/site_news/main2.php?uid=WID_0_2_1f0e913d80997c4d524675947a1395addfd2e27e&maximize=1&allbtn=0', 

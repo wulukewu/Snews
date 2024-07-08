@@ -119,7 +119,125 @@ def google_sheets_refresh():
   # 使用pandas創建數據框
   df = pd.DataFrame(rows_sheets)
 
-def main():
+def main(urls_temp):
+
+    school, category, url = urls_temp.split('@')
+    print(f'⦾{school} {category} {url}')
+
+    # chromedriver 設定
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+
+    service = Service(binary_path)
+    driver = webdriver.Chrome(service=service, options=options)
+    driver.get(url)
+
+    # 等待網頁載入完成
+    driver.implicitly_wait(10)
+
+    # 找到表格元素
+    res = requests.get(url)
+    soup = BeautifulSoup(res.text, 'html.parser')
+    table_div = driver.find_element(By.ID, 'div_table_content')
+    table = table_div.find_element(By.ID, 'ntb')
+    html = table.get_attribute('outerHTML')
+
+    # 解析HTML文件
+    soup = BeautifulSoup(html, 'html.parser')
+
+    # 格式化HTML文件
+    formatted_html = soup.prettify()
+    # print(formatted_html)
+
+    # 找到表格中的所有資料列
+    rows = table.find_elements(By.TAG_NAME, 'tr')
+
+    # 打印每一行的 HTML 內容
+    # for row in rows:
+    #     row_html = row.get_attribute('outerHTML')
+    #     print(row_html)
+
+    # 定義需要查找的最新幾筆資料（最多9筆）
+    numbers_of_new_data = 9
+
+    # 印出最新幾筆資料的標題、單位和連結
+    for i in range(numbers_of_new_data):
+        row = rows[numbers_of_new_data - i]
+
+        headers = []
+        first_row = rows[0]
+        header_cells = first_row.find_elements(By.TAG_NAME, 'th')
+        for cell in header_cells:
+          headers.append(cell.text)
+          # print(cell.text)
+        # print(headers)
+
+        # row_html = row.get_attribute('outerHTML')
+        # print(row_html)
+        cells = row.find_elements(By.TAG_NAME, 'td')
+        date = cells[headers.index('時間')].text if '時間' in headers else '-'
+        title = cells[headers.index('標題')].text if '標題' in headers else '-'
+        unit = cells[headers.index('單位')].text if '單位' in headers else '-'
+
+        # 使用 BeautifulSoup 解析 HTML
+        soup = BeautifulSoup(row.get_attribute('outerHTML'), 'html.parser')
+
+        # 找到 nid 的值
+        nid = soup.find('tr')['nid']
+
+        link_publish = f"{url[:url.find('ischool')]}ischool/public/news_view/show.php?nid={nid}"
+        link = f"{url[:url.find('ischool')]}ischool/public/news_view/show.php?nid={nid}"
+        content = get_content(link_publish)
+        print(f'date:{date}\tcategory:{category}\ttitle:{title}\tunit:{unit}\tnid:{nid}\tlink:{link}\tcontent:{content}')
+
+        # 獲取當前日期
+        today = datetime.date.today()
+
+        # 將日期格式化為2023/02/11的形式
+        formatted_date = today.strftime("%Y/%m/%d")
+
+        # 檢查nid是否已經存在於表格中
+        sent = not(str(int(nid)) in nids)
+
+        if sent:
+
+          # 檢查標題是否已經存在於表格中
+          titles = df[3].tolist()
+          if title in titles:
+            continue
+
+          # 獲取新行
+          now = datetime.datetime.now() + datetime.timedelta(hours=8)
+          new_row = [now.strftime("%Y-%m-%d %H:%M:%S"), school, category, date, title, unit, nid, link, content]
+
+          # 將新行添加到工作表中
+          worksheet.append_row(new_row)
+
+          # 獲取新行的索引
+          new_row_index = len(rows) + 1
+
+          # 更新單元格
+          cell_list = worksheet.range('A{}:I{}'.format(new_row_index, new_row_index))
+          for cell, value in zip(cell_list, new_row):
+              cell.value = value
+          worksheet.update_cells(cell_list)
+
+          # 更新nids列表
+          nids.append(int(nid))
+
+          # 傳送至LINE Notify
+          print(f'Sent: {nid}', end=' ')
+          LINE_Notify(school, category, date, title, unit, link, content)
+
+        # 刪除nid
+        del nid
+
+    # 關閉網頁
+    driver.quit()
+
+if __name__ == "__main__":
 
   # 開啟網頁
   urls = [
@@ -226,128 +344,15 @@ def main():
 
   for urls_temp in urls:
 
-      school, category, url = urls_temp.split('@')
-      print(f'⦾{school} {category} {url}')
-
-      # chromedriver 設定
-      options = webdriver.ChromeOptions()
-      options.add_argument('--headless')
-      options.add_argument('--no-sandbox')
-      options.add_argument('--disable-dev-shm-usage')
-
-      service = Service(binary_path)
-      driver = webdriver.Chrome(service=service, options=options)
-      driver.get(url)
-
-      # 等待網頁載入完成
-      driver.implicitly_wait(10)
-
-      # 找到表格元素
-      res = requests.get(url)
-      soup = BeautifulSoup(res.text, 'html.parser')
-      table_div = driver.find_element(By.ID, 'div_table_content')
-      table = table_div.find_element(By.ID, 'ntb')
-      html = table.get_attribute('outerHTML')
-
-      # 解析HTML文件
-      soup = BeautifulSoup(html, 'html.parser')
-
-      # 格式化HTML文件
-      formatted_html = soup.prettify()
-      # print(formatted_html)
-
-      # 找到表格中的所有資料列
-      rows = table.find_elements(By.TAG_NAME, 'tr')
-
-      # 打印每一行的 HTML 內容
-      # for row in rows:
-      #     row_html = row.get_attribute('outerHTML')
-      #     print(row_html)
-
-      # 定義需要查找的最新幾筆資料（最多9筆）
-      numbers_of_new_data = 9
-
-      # 印出最新幾筆資料的標題、單位和連結
-      for i in range(numbers_of_new_data):
-          row = rows[numbers_of_new_data - i]
-
-          headers = []
-          first_row = rows[0]
-          header_cells = first_row.find_elements(By.TAG_NAME, 'th')
-          for cell in header_cells:
-            headers.append(cell.text)
-            # print(cell.text)
-          # print(headers)
-
-          # row_html = row.get_attribute('outerHTML')
-          # print(row_html)
-          cells = row.find_elements(By.TAG_NAME, 'td')
-          date = cells[headers.index('時間')].text if '時間' in headers else '-'
-          title = cells[headers.index('標題')].text if '標題' in headers else '-'
-          unit = cells[headers.index('單位')].text if '單位' in headers else '-'
-
-          # 使用 BeautifulSoup 解析 HTML
-          soup = BeautifulSoup(row.get_attribute('outerHTML'), 'html.parser')
-
-          # 找到 nid 的值
-          nid = soup.find('tr')['nid']
-
-          link_publish = f"{url[:url.find('ischool')]}ischool/public/news_view/show.php?nid={nid}"
-          link = f"{url[:url.find('ischool')]}ischool/public/news_view/show.php?nid={nid}"
-          content = get_content(link_publish)
-          print(f'date:{date}\tcategory:{category}\ttitle:{title}\tunit:{unit}\tnid:{nid}\tlink:{link}\tcontent:{content}')
-
-          # 獲取當前日期
-          today = datetime.date.today()
-
-          # 將日期格式化為2023/02/11的形式
-          formatted_date = today.strftime("%Y/%m/%d")
-
-          # 檢查nid是否已經存在於表格中
-          sent = not(str(int(nid)) in nids)
-
-          if sent:
-
-            # 檢查標題是否已經存在於表格中
-            titles = df[3].tolist()
-            if title in titles:
-              continue
-
-            # 獲取新行
-            now = datetime.datetime.now() + datetime.timedelta(hours=8)
-            new_row = [now.strftime("%Y-%m-%d %H:%M:%S"), school, category, date, title, unit, nid, link, content]
-
-            # 將新行添加到工作表中
-            worksheet.append_row(new_row)
-
-            # 獲取新行的索引
-            new_row_index = len(rows) + 1
-
-            # 更新單元格
-            cell_list = worksheet.range('A{}:I{}'.format(new_row_index, new_row_index))
-            for cell, value in zip(cell_list, new_row):
-                cell.value = value
-            worksheet.update_cells(cell_list)
-
-            # 更新nids列表
-            nids.append(int(nid))
-
-            # 傳送至LINE Notify
-            print(f'Sent: {nid}', end=' ')
-            LINE_Notify(school, category, date, title, unit, link, content)
-
-          # 刪除nid
-          del nid
-
-      # 關閉網頁
-      driver.quit()
-
-if __name__ == "__main__":
-  try_times_limit = 5
-  for _ in range(try_times_limit):
-    try:
-      main()
-      break
-    except:
-      print('retrying...')
-      next
+    finished = False
+    try_times_limit = 2
+    for _ in range(try_times_limit):
+      try:
+        main(urls_temp)
+        finished = True
+        break
+      except:
+        print('retrying...')
+        next
+    
+    if not finished: print(f'error : {urls_temp}')

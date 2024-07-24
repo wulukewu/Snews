@@ -2,6 +2,7 @@ from selenium import webdriver
 from chromedriver_py import binary_path
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
 import re
 from bs4 import BeautifulSoup
 import requests
@@ -18,11 +19,13 @@ import json
 line_notify_id = os.environ['LINE_NOTIFY_ID']
 sheet_key = os.environ['GOOGLE_SHEETS_KEY']
 gs_credentials = os.environ['GS_CREDENTIALS']
+service = Service(ChromeDriverManager().install())
 
 # Variables - Google Colab
 # line_notify_id = LINE_NOTIFY_ID
 # sheet_key = GOOGLE_SHEETS_KEY
 # gs_credentials = GS_CREDENTIALS
+# service = Service(binary_path)
 
 # ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
@@ -130,7 +133,6 @@ def main(urls_temp):
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
 
-    service = Service(binary_path)
     driver = webdriver.Chrome(service=service, options=options)
     driver.get(url)
 

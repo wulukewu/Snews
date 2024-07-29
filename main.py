@@ -219,8 +219,8 @@ def main(urls_temp):
         nid = soup.find('tr')['nid']
 
         link_publish = f"{url[:url.find('ischool')]}ischool/public/news_view/show.php?nid={nid}"
-        # link = f"{url[:url.find('ischool')]}ischool/public/news_view/show.php?nid={nid}"
-        link = short_url(link_publish)
+        link = f"{url[:url.find('ischool')]}ischool/public/news_view/show.php?nid={nid}"
+        # link = short_url(link_publish)
         content = get_content(link_publish)
         print(f'school:{school}\tdate:{date}\tcategory:{category}\ttitle:{title}\tunit:{unit}\tnid:{nid}\tlink:{link}\tcontent:{content}')
 
@@ -236,9 +236,11 @@ def main(urls_temp):
         if sent:
 
           # 檢查標題是否已經存在於表格中
-          titles = df[3].tolist()
+          titles = df[4].tolist()
           if title in titles:
             continue
+
+          link = short_url(link_publish)
 
           # 獲取新行
           now = datetime.datetime.now() + datetime.timedelta(hours=8)

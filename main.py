@@ -18,12 +18,14 @@ import json
 # Variables - GitHub
 line_notify_id = os.environ['LINE_NOTIFY_ID']
 sheet_key = os.environ['GOOGLE_SHEETS_KEY']
+reurl_api_key = os.environ['REURL_API_KEY']
 gs_credentials = os.environ['GS_CREDENTIALS']
 service = Service(ChromeDriverManager().install())
 
 # Variables - Google Colab
 # line_notify_id = LINE_NOTIFY_ID
 # sheet_key = GOOGLE_SHEETS_KEY
+# reurl_api_key = REURL_API_KEY
 # gs_credentials = GS_CREDENTIALS
 # service = Service(binary_path)
 
@@ -75,6 +77,33 @@ def get_content(url):
   return text
 
 text_limit = 1000-4-14
+
+# reurl shorten
+def short_url(url):
+    headers = {
+        "Content-Type": "application/json",
+        "reurl-api-key": reurl_api_key
+    }
+    data = {
+        "url": url,
+        "utm_source": "FB_AD"
+    }
+
+    response = requests.post(url = 'https://api.reurl.cc/shorten',
+                            headers = headers,
+                            json = data
+    )
+
+    if response.status_code == 200:
+        short_url_json = response.json()
+        short_url = short_url_json['short_url']
+        print(f'short_url : {short_url}')
+        return short_url
+        # print(response.json())
+        # return response.json()
+    else:
+        print(f"Failed to shorten URL: {response.status_code}, {response.text}")
+        return url
 
 # LINE Notify
 def LINE_Notify(school, category, date, title, unit, link, content):
@@ -190,7 +219,8 @@ def main(urls_temp):
         nid = soup.find('tr')['nid']
 
         link_publish = f"{url[:url.find('ischool')]}ischool/public/news_view/show.php?nid={nid}"
-        link = f"{url[:url.find('ischool')]}ischool/public/news_view/show.php?nid={nid}"
+        # link = f"{url[:url.find('ischool')]}ischool/public/news_view/show.php?nid={nid}"
+        link = short_url(link_publish)
         content = get_content(link_publish)
         print(f'school:{school}\tdate:{date}\tcategory:{category}\ttitle:{title}\tunit:{unit}\tnid:{nid}\tlink:{link}\tcontent:{content}')
 

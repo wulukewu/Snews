@@ -30,4 +30,5 @@ jobs:
         env: 
           LINE_NOTIFY_ID: ${{ secrets.LINE_NOTIFY_ID }}
           GOOGLE_SHEETS_KEY: ${{ secrets.GOOGLE_SHEETS_KEY }}
+          REURL_API_KEY: ${{ secrets.REURL_API_KEY }}
           GS_CREDENTIALS: ${{ secrets.GS_CREDENTIALS }}

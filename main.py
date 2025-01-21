@@ -431,8 +431,8 @@ if __name__ == "__main__":
       print(f'error : {urls_temp}')
 
   if len(error_links) == 0:
-    print("--------------------------------------------------\nAll Finished Successfully. ")
+    print(f"{'-'*50}\nAll Finished Successfully. ")
   else:
-    print(f"--------------------------------------------------\nAll Finished, Here Are All The Links That Cannot Be Sent Successfully. ({len(error_links)} files)")
+    print(f"{'-'*50}\nAll Finished, Here Are All The Links That Cannot Be Sent Successfully. ({len(error_links)} files)")
     for error_link in error_links:
       print(error_link)

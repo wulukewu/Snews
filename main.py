@@ -394,8 +394,14 @@ urls = [
 if __name__ == "__main__":
 
   # 刷新Google Sheets表格
-  google_sheets_refresh()
-
+  google_sheets_refresh_retry_limit = 3
+  for _ in range(google_sheets_refresh_retry_limit):
+    try:
+      google_sheets_refresh()
+      break
+    except Exception as e:
+      print(f'google_sheets_refresh error: {e}\nretrying...')
+     
   # 取得Google Sheets nids列表
   _nids = df[6].tolist()
   nids = []

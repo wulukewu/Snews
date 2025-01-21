@@ -19,8 +19,8 @@ import json
 # Variables - GitHub
 line_notify_id = os.environ['LINE_NOTIFY_ID']
 discord_token = os.environ['DISCORD_TOKEN']
-discord_guild_id = os.environ['DISCORD_GUILD_ID']
-discord_channel_id = os.environ['DISCORD_CHANNEL_ID']
+discord_guild_id = int(os.environ['DISCORD_GUILD_ID'])
+discord_channel_id = int(os.environ['DISCORD_CHANNEL_ID'])
 sheet_key = os.environ['GOOGLE_SHEETS_KEY']
 reurl_api_key = os.environ['REURL_API_KEY']
 gs_credentials = os.environ['GS_CREDENTIALS']

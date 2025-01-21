@@ -9,6 +9,7 @@ import requests
 import datetime
 from google.oauth2.service_account import Credentials
 import gspread
+import discord
 import pandas as pd
 import os
 import json
@@ -17,6 +18,9 @@ import json
 
 # Variables - GitHub
 line_notify_id = os.environ['LINE_NOTIFY_ID']
+discord_token = os.environ['DISCORD_TOKEN']
+discord_guild_id = os.environ['DISCORD_GUILD_ID']
+discord_channel_id = os.environ['DISCORD_CHANNEL_ID']
 sheet_key = os.environ['GOOGLE_SHEETS_KEY']
 reurl_api_key = os.environ['REURL_API_KEY']
 gs_credentials = os.environ['GS_CREDENTIALS']
@@ -105,10 +109,10 @@ def short_url(url):
         print(f"Failed to shorten URL: {response.status_code}, {response.text}")
         return url
 
-# LINE Notify
-def LINE_Notify(school, category, date, title, unit, link, content):
+# Process message
+def Process_Message(category, date, title, unit, link, content):
 
-  send_info_1 = f'【{school}】【{category}】{title}\n⦾公告日期：{date}\n⦾發佈單位：{unit}'
+  send_info_1 = f'【{category}】{title}\n⦾公告日期：{date}\n⦾發佈單位：{unit}'
   send_info_2 = f'⦾內容：' if content != '' else ''
   send_info_3 = f'⦾更多資訊：{link}'
 
@@ -119,17 +123,37 @@ def LINE_Notify(school, category, date, title, unit, link, content):
     params_message = f'{send_info_1}\n{send_info_2}{content}\n{send_info_3}'
   else:
     params_message = f'{send_info_1}\n{send_info_3}'
+  
+  return params_message
 
-  for LINE_Notify_ID in LINE_Notify_IDs:
-    headers = {
-            'Authorization': 'Bearer ' + LINE_Notify_ID,
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-    params = {'message': params_message}
+# LINE Notify
+def LINE_Notify(message, LINE_Notify_ID):
 
-    r = requests.post('https://notify-api.line.me/api/notify',
-                            headers=headers, params=params)
-    print(r.status_code)  #200
+  headers = {
+          'Authorization': 'Bearer ' + LINE_Notify_ID,
+          'Content-Type': 'application/x-www-form-urlencoded'
+      }
+  params = {'message': message}
+
+  r = requests.post('https://notify-api.line.me/api/notify',
+                          headers=headers, params=params)
+  print(r.status_code)  #200
+
+# Discord 發送
+def dc_send(message, token, guild_id, channel_id):
+
+    intents = discord.Intents.default()
+    client = discord.Client(intents=intents)
+
+    @client.event
+    async def on_ready():
+        print(f'We have logged in as {client.user}')
+        guild = discord.utils.get(client.guilds, id=guild_id)
+        channel = discord.utils.get(guild.channels, id=channel_id)
+        await channel.send(message)
+        await client.close()
+
+    client.run(token)
 
 # Google Sheets 紀錄
 scope = ['https://www.googleapis.com/auth/spreadsheets']
@@ -261,9 +285,14 @@ def main(urls_temp):
           # 更新nids列表
           nids.append(int(nid))
 
+          # 處理訊息
+          params_message = Process_Message(category, date, title, unit, link, content)
+          
           # 傳送至LINE Notify
           print(f'Sent: {nid}', end=' ')
-          LINE_Notify(school, category, date, title, unit, link, content)
+          for LINE_Notify_ID in LINE_Notify_IDs:
+              LINE_Notify(params_message, LINE_Notify_ID)
+              dc_send(params_message, discord_token, discord_guild_id, discord_channel_id)
 
         # 刪除nid
         del nid

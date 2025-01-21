@@ -292,7 +292,9 @@ def main(urls_temp):
           print(f'Sent: {nid}', end=' ')
           for LINE_Notify_ID in LINE_Notify_IDs:
               LINE_Notify(params_message, LINE_Notify_ID)
-              dc_send(params_message, discord_token, discord_guild_id, discord_channel_id)
+
+          # 傳送至Discord
+          dc_send(params_message, discord_token, discord_guild_id, discord_channel_id)
 
         # 刪除nid
         del nid

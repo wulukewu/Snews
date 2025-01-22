@@ -74,13 +74,13 @@ def get_content(url):
   for p in p_tags:
       text = p.text.strip()
       text_list.append(text)
-  text = ' '.join(text_list)
-  text = ' '.join(text.split())  # 利用 split() 和 join() 將多個空白轉成單一空白
+  text = '\n'.join(text_list)
+  # text = ' '.join(text.split())  # 利用 split() 和 join() 將多個空白轉成單一空白
   # text = text.replace(' ', '\n')  # 將空白轉換成換行符號
-  text = text.replace(' ', '')  # 刪除空白
+  # text = text.replace(' ', '')  # 刪除空白
   return text
 
-text_limit = 1000-4-14
+# text_limit = 1000-4-14
 
 # reurl shorten
 def short_url(url):
@@ -118,8 +118,8 @@ def Process_Message(category, date, title, unit, link, content):
 
   text_len = len(send_info_1) + len(send_info_2) + len(send_info_3)
   if content != '':
-    if text_len + len(content) > text_limit:
-      content = f'{content[:(text_limit - text_len)]}⋯'
+    # if text_len + len(content) > text_limit:
+    #   content = f'{content[:(text_limit - text_len)]}⋯'
     params_message = f'{send_info_1}\n{send_info_2}{content}\n{send_info_3}'
   else:
     params_message = f'{send_info_1}\n{send_info_3}'
@@ -290,8 +290,8 @@ def main(urls_temp):
           
           # 傳送至LINE Notify
           print(f'Sent: {nid}', end=' ')
-          for LINE_Notify_ID in LINE_Notify_IDs:
-              LINE_Notify(params_message, LINE_Notify_ID)
+          # for LINE_Notify_ID in LINE_Notify_IDs:
+          #     LINE_Notify(params_message, LINE_Notify_ID)
 
           # 傳送至Discord
           dc_send(params_message, discord_token, discord_guild_id, discord_channel_id)

@@ -80,7 +80,7 @@ def get_content(url):
   # text = text.replace(' ', '')  # 刪除空白
   return text
 
-# text_limit = 1000-4-14
+text_limit = 2000-100
 
 # reurl shorten
 def short_url(url):
@@ -118,8 +118,8 @@ def Process_Message(category, date, title, unit, link, content):
 
   text_len = len(send_info_1) + len(send_info_2) + len(send_info_3)
   if content != '':
-    # if text_len + len(content) > text_limit:
-    #   content = f'{content[:(text_limit - text_len)]}⋯'
+    if text_len + len(content) > text_limit:
+      content = f'{content[:(text_limit - text_len)]}⋯'
     params_message = f'{send_info_1}\n{send_info_2}{content}\n{send_info_3}'
   else:
     params_message = f'{send_info_1}\n{send_info_3}'

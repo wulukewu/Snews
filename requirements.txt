@@ -8,4 +8,4 @@ selenium
 pandas
 gspread
 google-auth
-discord
+python-dotenv
